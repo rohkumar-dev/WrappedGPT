@@ -1,8 +1,14 @@
+"use client";
+
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { NavbarButton } from "./NavbarButton";
 import Link from "next/link";
+import { signOut } from "next-auth/react";
+import { useSpotifyUser } from "@/hooks/useSpotifyUser";
 
 export const Navbar = () => {
+  const { user, loading, error } = useSpotifyUser();
+
   return (
     <nav className="bg-black text-white py-4 px-6 flex justify-between items-center">
       <Link href="/dashboard">
@@ -20,14 +26,23 @@ export const Navbar = () => {
 
       <div className="flex items-center space-x-4">
         <div className="text-right">
-          <div className="text-white text-md font-medium">Username</div>
-          <Link href="/">
-            <div className="text-gray-400 text-xs font-thin">Log Out</div>
-          </Link>
+          <div className="text-white text-lg font-medium leading-tight">{user?.displayName || "Unknown"}</div>
+          <button
+            onClick={() => signOut({ callbackUrl: "/" })}
+            className="text-gray-400 text-sm font-thin hover:text-white transition-colors mt-0"
+          >
+            Log Out
+          </button>
         </div>
         <Avatar>
-          <AvatarImage src="/path-to-profile-pic.jpg" alt="User Profile" />
-          <AvatarFallback></AvatarFallback>
+          {user?.imageUrl ? (
+            <AvatarImage src={user.imageUrl} alt={`${user.displayName}'s Profile`} />
+          ) : (
+            // Fallback avatar with a green circle and user's initial
+            <AvatarFallback className="bg-spotify-green text-black font-bold flex items-center justify-center">
+              {user?.displayName?.charAt(0).toUpperCase() || "" /* Extracts user's initial and capitalizes it. */}
+            </AvatarFallback>
+          )}
         </Avatar>
       </div>
     </nav>
