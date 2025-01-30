@@ -7,7 +7,7 @@ import { signOut } from "next-auth/react";
 import { useSpotifyUser } from "@/hooks/useSpotifyUser";
 
 export const Navbar = () => {
-  const { user, loading, error } = useSpotifyUser();
+  const { user } = useSpotifyUser();
 
   return (
     <nav className="bg-black text-white py-4 px-6 flex justify-between items-center">

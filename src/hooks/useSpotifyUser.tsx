@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { getSession } from "next-auth/react";
 
 interface SpotifyUser {
   displayName: string;
@@ -6,7 +7,7 @@ interface SpotifyUser {
   imageUrl: string | null;
 }
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL; // Get from env
 
 export const useSpotifyUser = () => {
   const [user, setUser] = useState<SpotifyUser | null>(null);
@@ -17,7 +18,13 @@ export const useSpotifyUser = () => {
     const fetchUser = async () => {
       setLoading(true);
       try {
-        const response = await fetch(`${API_BASE_URL}/spotifyUser`);
+        const session = await getSession();
+        
+        if (!session || !session.accessToken) {
+          throw new Error("No Spotify access token found in session.");
+        }
+
+        const response = await fetch(`${API_BASE_URL}/spotifyUser?accessToken=${session.accessToken}`);
 
         if (!response.ok) {
           throw new Error(`Failed to fetch user profile: ${response.statusText}`);

@@ -1,4 +1,4 @@
-import NextAuth, { NextAuthOptions } from "next-auth";
+import NextAuth, { NextAuthOptions, Session } from "next-auth";
 import SpotifyProvider from "next-auth/providers/spotify";
 import { JWT } from "next-auth/jwt";
 
@@ -14,15 +14,17 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
-    async jwt({ token, account }: { token: JWT; account?: any }) {
+    async jwt({ token, account }: { token: JWT; account?: Record<string, unknown> }) {
       if (account) {
-        token.accessToken = account.access_token;
+        token.accessToken = account.access_token as string;
       }
       return token;
     },
-    async session({ session, token }: { session: any; token: JWT }) {
-      session.accessToken = token.accessToken as string;
-      return session;
+    async session({ session, token }: { session: Session; token: JWT }) {
+      return {
+        ...session,
+        accessToken: token.accessToken as string,
+      };
     },
   },
   secret: process.env.NEXTAUTH_SECRET,
