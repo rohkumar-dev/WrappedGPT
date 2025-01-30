@@ -1,9 +1,17 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import { signIn } from "next-auth/react";
 
 export default function LoginPage() {
-  const backgroundImageUrl = 'https://images.unsplash.com/photo-1504509546545-e000b4a62425?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2370&q=80'
-  
+  const backgroundImageUrl =
+    "https://images.unsplash.com/photo-1504509546545-e000b4a62425?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2370&q=80";
+
+  // Initiate login with NextAuth (Spotify)
+  const handleLogin = async () => {
+    await signIn("spotify", { callbackUrl: "/dashboard" });
+  };
+
   return (
     <div
       className="h-screen flex items-center justify-center bg-cover bg-center"
@@ -15,12 +23,12 @@ export default function LoginPage() {
           WrappedGPT
         </h1>
 
-        <Link href="/api/spotifyAuth">
-          <Button className="bg-spotify-green hover:bg-spotify-green-dark text-gray-200 px-6 py-3 text-md rounded-lg font-light drop-shadow-md">
-            Connect to Spotify
-          </Button>
-        </Link>
-
+        <Button
+          onClick={handleLogin}
+          className="bg-spotify-green hover:bg-spotify-green-dark text-gray-200 px-6 py-3 text-md rounded-lg font-light drop-shadow-md"
+        >
+          Connect to Spotify
+        </Button>
       </div>
     </div>
   );

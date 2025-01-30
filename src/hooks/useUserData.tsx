@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { UserData } from "@/types/UserData";
+import { getSession } from "next-auth/react";
 
 export const useUserData = () => {
   const [data, setData] = useState<UserData | null>(null);
@@ -8,9 +9,16 @@ export const useUserData = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      setLoading(true); // Start loading
+      setLoading(true);
+
       try {
-        const response = await fetch("/api/spotifyTop");
+        const session = await getSession();
+
+        if (!session || !session.accessToken) {
+          throw new Error("No Spotify access token found in session.");
+        }
+
+        const response = await fetch(`/api/spotifyTop?accessToken=${session.accessToken}`);
 
         if (!response.ok) {
           throw new Error(`Failed to fetch: ${response.status} ${response.statusText}`);
@@ -19,7 +27,7 @@ export const useUserData = () => {
         const result: UserData = await response.json();
         setData(result);
       } catch (err) {
-        console.error("Error fetching user data:", err);
+        console.error("❌ Error fetching user data:", err);
         setError(err as Error);
       } finally {
         setLoading(false);
