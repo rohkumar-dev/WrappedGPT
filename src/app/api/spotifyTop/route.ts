@@ -4,6 +4,7 @@ import { UserData } from "@/types/UserData";
 
 const SPOTIFY_API_BASE = "https://api.spotify.com/v1";
 
+
 const fetchTopData = async (token: string, type: "tracks" | "artists", term: string) => {
   const limit = 50;
   let allItems: any[] = [];

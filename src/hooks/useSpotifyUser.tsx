@@ -6,6 +6,8 @@ interface SpotifyUser {
   imageUrl: string | null;
 }
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
 export const useSpotifyUser = () => {
   const [user, setUser] = useState<SpotifyUser | null>(null);
   const [loading, setLoading] = useState(true);
@@ -15,7 +17,7 @@ export const useSpotifyUser = () => {
     const fetchUser = async () => {
       setLoading(true);
       try {
-        const response = await fetch("/api/spotifyUser");
+        const response = await fetch(`${API_BASE_URL}/spotifyUser`);
 
         if (!response.ok) {
           throw new Error(`Failed to fetch user profile: ${response.statusText}`);
