@@ -15,7 +15,7 @@ export default function LoginPage() {
           WrappedGPT
         </h1>
 
-        <Link href="/dashboard">
+        <Link href="/api/spotifyAuth">
           <Button className="bg-spotify-green hover:bg-spotify-green-dark text-gray-200 px-6 py-3 text-md rounded-lg font-light drop-shadow-md">
             Connect to Spotify
           </Button>

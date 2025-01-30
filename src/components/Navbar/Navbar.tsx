@@ -13,8 +13,9 @@ export const Navbar = () => {
       </Link>
 
       <div className="flex-1 flex justify-center space-x-32">
-        <NavbarButton href="/dashboard" buttonText="Your Top Tracks & Artists" />
+        <NavbarButton href="/dashboard" buttonText="Your Top" />
         <NavbarButton href="/recommendations" buttonText="Recommendations" />
+        <NavbarButton href="/howitworks" buttonText="How It Works" />
       </div>
 
       <div className="flex items-center space-x-4">
