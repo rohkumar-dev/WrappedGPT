@@ -9,9 +9,9 @@ export default {
   component: DashboardPage,
 } as StoryObj<typeof DashboardPage>;
 
-const Template: StoryFn<typeof DashboardPage> = (args) => (
+const Template: StoryFn<typeof DashboardPage> = () => (
   <div className="bg-black h-screen w-screen text-white">
-    <DashboardPage {...args} />
+    <DashboardPage/>
   </div>
 );
 

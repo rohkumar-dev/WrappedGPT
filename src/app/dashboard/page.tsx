@@ -1,4 +1,5 @@
 "use client";
+import { Suspense } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Navbar } from "@/components/Navbar";
 import { List } from "@/components/List";
@@ -7,7 +8,7 @@ import { Term } from "@/types/UserData";
 import { getTermData } from "@/hooks/getTermData";
 import { useUserData } from "@/hooks/useUserData";
 
-export default function DashboardPage() {
+function DashboardContent() {
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -15,10 +16,12 @@ export default function DashboardPage() {
 
   const { data, loading, error } = useUserData();
 
-  const handleTermChange = (value: Term) => {
-    const params = new URLSearchParams(searchParams);
-    params.set("term", value);
-    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+  const handleTermChange = (value: string) => {
+    if (Object.values(Term).includes(value as Term)) {
+      const params = new URLSearchParams(searchParams);
+      params.set("term", value);
+      router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+    }
   };
 
   return (
@@ -54,5 +57,13 @@ export default function DashboardPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function DashboardPage() {
+  return (
+    <Suspense fallback={<div className="text-white">Loading...</div>}>
+      <DashboardContent />
+    </Suspense>
   );
 }
